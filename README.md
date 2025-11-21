@@ -24,49 +24,54 @@ We propose **LAOF (Robust Latent Action learning with Optical Flow constraints)*
 
 ## Methodology
 
+<div align="center">
+  <img src="./assets/framework.png" width="800px" alt="LAOF Framework">
+</div>
+
 ### Visualization of Optical Flow
 <p align="center">
   <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/spatial.gif" width="130"/><br>
+    <img src="./assets/spatial.gif" width="140"/><br>
     <b>Spatial</b>
   </span>
   <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/object.gif" width="130"/><br>
+    <img src="./assets/object.gif" width="140"/><br>
     <b>Object-centric</b>
   </span>
+</p>
+
+<p align="center">
   <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/goal.gif" width="130"/><br>
+    <img src="./assets/goal.gif" width="140"/><br>
     <b>Goal-oriented</b>
   </span>
   <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/long.gif" width="130"/><br>
+    <img src="./assets/long.gif" width="140"/><br>
     <b>Long-horizon</b>
   </span>
 </p>
 
-
 <p align="center">
   <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/bigfish.gif" width="250"/><br>
+    <img src="./assets/bigfish.gif" width="240"/><br>
     <b>BigFish</b>
   </span>
   <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/chaser.gif" width="250"/><br>
+    <img src="./assets/chaser.gif" width="240"/><br>
     <b>Chaser</b>
   </span>
 </p>
 
 <p align="center">
   <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/leaper.gif" width="180"/><br>
+    <img src="./assets/leaper.gif" width="240"/><br>
     <b>Leaper</b>
   </span>
   <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/heist.gif" width="180"/><br>
+    <img src="./assets/heist.gif" width="240"/><br>
     <b>Heist</b>
   </span>
 </p>
-
 
 
 ### Architecture
@@ -78,7 +83,7 @@ LAOF extends the Latent Action Policies (LAPO) paradigm by integrating a **Flow 
     * **FDM**: Predicts next state $\hat{s}_{t+1}$.
     * **Flow Decoder**: Decodes $z_t$ into predicted optical flow $\hat{f}_t$.
     * **Objective**: Minimizes reconstruction loss + optical flow constraint loss.
-        $$\mathcal{L}_{pretrain} = \mathcal{L}_{reconstruction} + \mathcal{L}_{flow}$$
+        $\mathcal{L}_{pretrain} = \mathcal{L}_{reconstruction} + \mathcal{L}_{flow}$
 
 2.  **Distillation**:
     * Transfers the learned IDM representations to a latent policy $\pi$ using language instructions $l_t$.
@@ -89,7 +94,7 @@ LAOF extends the Latent Action Policies (LAPO) paradigm by integrating a **Flow 
 ### Optical Flow Processing
 * **Static Backgrounds**: Uses standard **RAFT** flow estimation.
 * **Dynamic Distractors**: Applies **LangSAM** to generate object-centric masks, filtering out non-agent motion.
-* **Format**: Converts flow (u, v) to RGB (HSV) for unified processing with visual encoders (DINOv2).
+* **Format**: Converts flow $(u, v)$ to RGB (HSV) for unified processing with visual encoders (DINOv2).
 
 ---
 
