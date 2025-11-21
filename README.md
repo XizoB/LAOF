@@ -1,39 +1,103 @@
+# LAOF: Robust Latent Action Learning with Optical Flow Constraints
+
+[![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b.svg)](https://arxiv.org/abs/2025.04999) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Official implementation of the paper: **"LAOF: Robust Latent Action Learning with Optical Flow Constraints"**.
+
+[cite_start]**Authors**: [Xizhou Bu](https://github.com/XizoB)<sup>1</sup>, Jiexi Lyu<sup>1</sup>, Fulei Sun<sup>1</sup>, Ruichen Yang<sup>1</sup>, Zhiqiang Ma<sup>2</sup>, Wei Li<sup>1</sup> [cite: 2, 3]  
+[cite_start]**Affiliations**: <sup>1</sup>Fudan University, <sup>2</sup>Northwestern Polytechnical University [cite: 4]
+
+---
+
+## Abstract
+
+Learning latent actions from large-scale videos is crucial for pre-training scalable embodied foundation models. However, existing methods often struggle with action-irrelevant distractors (e.g., moving backgrounds). While action supervision can help, action labels are scarce.
+
+We propose **LAOF (Robust Latent Action learning with Optical Flow constraints)**, a pseudo-supervised framework that leverages the agent's optical flow as an action-driven signal. By assuming that optical flow represents pixel-level motion naturally correlated with physical actions, LAOF learns robust latent action representations.
+
+**Key Highlights:**
+* **Optical Flow Constraints**: Introduces a flow decoder to enforce physical motion consistency on latent actions.
+* **Object-Centric**: Uses LangSAM to filter dynamic distractors in complex environments (e.g., games).
+* **High Efficiency**: Even **without** action supervision, LAOF matches or surpasses action-supervised methods trained with **1%** of action labels.
+
+---
+
+## Methodology
+
+### Visualization of Optical Flow
+<p align="center">
+  <span style="display:inline-block; text-align:center; margin:8px;">
+    <img src="./assets/spatial.gif" width="130"/><br>
+    <b>Spatial</b>
+  </span>
+  <span style="display:inline-block; text-align:center; margin:8px;">
+    <img src="./assets/object.gif" width="130"/><br>
+    <b>Object-centric</b>
+  </span>
+  <span style="display:inline-block; text-align:center; margin:8px;">
+    <img src="./assets/goal.gif" width="130"/><br>
+    <b>Goal-oriented</b>
+  </span>
+  <span style="display:inline-block; text-align:center; margin:8px;">
+    <img src="./assets/long.gif" width="130"/><br>
+    <b>Long-horizon</b>
+  </span>
+</p>
+
+
+<p align="center">
+  <span style="display:inline-block; text-align:center; margin:8px;">
+    <img src="./assets/bigfish.gif" width="250"/><br>
+    <b>BigFish</b>
+  </span>
+  <span style="display:inline-block; text-align:center; margin:8px;">
+    <img src="./assets/chaser.gif" width="250"/><br>
+    <b>Chaser</b>
+  </span>
+</p>
+
+<p align="center">
+  <span style="display:inline-block; text-align:center; margin:8px;">
+    <img src="./assets/leaper.gif" width="180"/><br>
+    <b>Leaper</b>
+  </span>
+  <span style="display:inline-block; text-align:center; margin:8px;">
+    <img src="./assets/heist.gif" width="180"/><br>
+    <b>Heist</b>
+  </span>
+</p>
 
 
 
-# Build Datasets
-## LangSAM
-git clone https://github.com/luca-medeiros/lang-segment-anything.git
-## RAFT
-git clone https://github.com/princeton-vl/RAFT.git
-## 
-python sample_datasets_with_opticalflow_sam_masknums.py env_name="bigfish" exp_name="default/bigfish_default"
-python convert_data_rlds_masknums.py --env_name bigfish_0.01
-python convert_data_rlds_masknums.py --env_name bigfish_0.01_noaction --train_shards 30
+### Architecture
+LAOF extends the Latent Action Policies (LAPO) paradigm by integrating a **Flow Decoder**. The training pipeline consists of three stages:
 
-# Stage1
-############### 1 LAPO idm ###############
-python stage1_idm.py env_name="bigfish" data_type="opticalflow_rlds" exp_name="opticalflow_rlds/bigfish"
+1.  **Pre-training (Unsupervised)**:
+    * Input: Consecutive observations $(o_t, o_{t+1})$ and RGB-formatted optical flow $f_{rgb,t}$.
+    * **IDM**: Infers latent action $z_t$.
+    * **FDM**: Predicts next state $\hat{s}_{t+1}$.
+    * **Flow Decoder**: Decodes $z_t$ into predicted optical flow $\hat{f}_t$.
+    * **Objective**: Minimizes reconstruction loss + optical flow constraint loss.
+        $$\mathcal{L}_{pretrain} = \mathcal{L}_{reconstruction} + \mathcal{L}_{flow}$$
 
-############### 2 CoMo idmres ###############
-python stage1_idmres.py env_name="bigfish" data_type="opticalflow_rlds" exp_name="opticalflow_rlds/bigfish_idmres"
+2.  **Distillation**:
+    * Transfers the learned IDM representations to a latent policy $\pi$ using language instructions $l_t$.
 
-############### 3 CoMo w/ OF idmres ###############
-python stage1_idmres_flowdecoder.py env_name="bigfish" data_type="opticalflow_rlds" exp_name="opticalflow_rlds/bigfish_idmres_flowdecoder"
+3.  **Fine-tuning**:
+    * Trains a lightweight action decoder to map latent actions to physical actions using a small set of labeled data.
 
-############### 4 LAOF ###############
-python stage1_idm_flowdecoder.py env_name="bigfish" data_type="opticalflow_rlds" exp_name="opticalflow_rlds/bigfish_flowdecoder"
+### Optical Flow Processing
+* **Static Backgrounds**: Uses standard **RAFT** flow estimation.
+* **Dynamic Distractors**: Applies **LangSAM** to generate object-centric masks, filtering out non-agent motion.
+* **Format**: Converts flow (u, v) to RGB (HSV) for unified processing with visual encoders (DINOv2).
 
-############### 5 LAOM-Action ###############
-python stage1_idm_actiondecoder_noaction.py env_name="bigfish" data_type="opticalflow_rlds" ratio=0.01 exp_name="opticalflow_rlds/bigfish_actiondecoder_0.01_noaction"
+---
 
-############### 6 LAOF-Action ###############
-python stage1_idm_actiondecoder_flowdecoder_noaction.py env_name="bigfish" data_type="opticalflow_rlds" ratio=0.01 exp_name="opticalflow_rlds/bigfish_actiondecoder_flowdecoder_0.01_noaction"
+## Installation
 
-
-# Stage2
-python stage2_bc.py env_name="bigfish" data_type="opticalflow_rlds" exp_name="opticalflow_rlds/bigfish"
-
-
-# Stage3
-python stage3_decoding.py env_name="bigfish" data_type="opticalflow_rlds" exp_name="opticalflow_rlds/bigfish"
+```bash
+git clone [https://github.com/XizoB/LAOF.git](https://github.com/XizoB/LAOF.git)
+cd LAOF
+conda create -n laof python=3.10
+conda activate laof
+pip install -r requirements.txt
