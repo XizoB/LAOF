@@ -4,8 +4,8 @@
 
 Official implementation of the paper: **"LAOF: Robust Latent Action Learning with Optical Flow Constraints"**.
 
-[cite_start]**Authors**: [Xizhou Bu](https://github.com/XizoB)<sup>1</sup>, Jiexi Lyu<sup>1</sup>, Fulei Sun<sup>1</sup>, Ruichen Yang<sup>1</sup>, Zhiqiang Ma<sup>2</sup>, Wei Li<sup>1</sup> [cite: 2, 3]  
-[cite_start]**Affiliations**: <sup>1</sup>Fudan University, <sup>2</sup>Northwestern Polytechnical University [cite: 4]
+**Authors**: [Xizhou Bu](https://github.com/XizoB)<sup>1</sup>, Jiexi Lyu<sup>1</sup>, Fulei Sun<sup>1</sup>, Ruichen Yang<sup>1</sup>, Zhiqiang Ma<sup>2</sup>, Wei Li<sup>1</sup>  
+**Affiliations**: <sup>1</sup>Fudan University, <sup>2</sup>Northwestern Polytechnical University
 
 ---
 
@@ -29,49 +29,16 @@ We propose **LAOF (Robust Latent Action learning with Optical Flow constraints)*
 </div>
 
 ### Visualization of Optical Flow
-<p align="center">
-  <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/spatial.gif" width="140"/><br>
-    <b>Spatial</b>
-  </span>
-  <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/object.gif" width="140"/><br>
-    <b>Object-centric</b>
-  </span>
-</p>
 
-<p align="center">
-  <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/goal.gif" width="140"/><br>
-    <b>Goal-oriented</b>
-  </span>
-  <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/long.gif" width="140"/><br>
-    <b>Long-horizon</b>
-  </span>
-</p>
-
-<p align="center">
-  <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/bigfish.gif" width="240"/><br>
-    <b>BigFish</b>
-  </span>
-  <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/chaser.gif" width="240"/><br>
-    <b>Chaser</b>
-  </span>
-</p>
-
-<p align="center">
-  <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/leaper.gif" width="240"/><br>
-    <b>Leaper</b>
-  </span>
-  <span style="display:inline-block; text-align:center; margin:8px;">
-    <img src="./assets/heist.gif" width="240"/><br>
-    <b>Heist</b>
-  </span>
-</p>
+| **Spatial** | **Object-centric** |
+| :---: | :---: |
+| <img src="./assets/spatial.gif" width="140"> | <img src="./assets/object.gif" width="140"> |
+| **Goal-oriented** | **Long-horizon** |
+| <img src="./assets/goal.gif" width="140"> | <img src="./assets/long.gif" width="140"> |
+| **BigFish** | **Chaser** |
+| <img src="./assets/bigfish.gif" width="240"> | <img src="./assets/chaser.gif" width="240"> |
+| **Leaper** | **Heist** |
+| <img src="./assets/leaper.gif" width="240"> | <img src="./assets/heist.gif" width="240"> |
 
 
 ### Architecture
@@ -83,7 +50,7 @@ LAOF extends the Latent Action Policies (LAPO) paradigm by integrating a **Flow 
     * **FDM**: Predicts next state $\hat{s}_{t+1}$.
     * **Flow Decoder**: Decodes $z_t$ into predicted optical flow $\hat{f}_t$.
     * **Objective**: Minimizes reconstruction loss + optical flow constraint loss.
-        $\mathcal{L}_{pretrain} = \mathcal{L}_{reconstruction} + \mathcal{L}_{flow}$
+        $L_{pretrain} = L_{reconstruction} + L_{flow}$
 
 2.  **Distillation**:
     * Transfers the learned IDM representations to a latent policy $\pi$ using language instructions $l_t$.
