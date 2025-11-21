@@ -21,27 +21,31 @@ We propose **LAOF (Robust Latent Action learning with Optical Flow constraints)*
 * **High Efficiency**: Even **without** action supervision, LAOF matches or surpasses action-supervised methods trained with **1%** of action labels.
 
 ---
+## Visualization of Optical Flow
 
-## Methodology
 
 <div align="center">
-  <img src="./assets/framework.png" width="800px" alt="LAOF Framework">
-</div>
-
-### Visualization of Optical Flow
 
 | **Spatial** | **Object** |
 | :---: | :---: |
-| <img src="./assets/spatial.gif" width="140"> | <img src="./assets/object.gif" width="140"> |
+| <img src="./assets/spatial.gif" width="180"> | <img src="./assets/object.gif" width="180"> |
 | **Goal** | **Long** |
-| <img src="./assets/goal.gif" width="140"> | <img src="./assets/long.gif" width="140"> |
+| <img src="./assets/goal.gif" width="180"> | <img src="./assets/long.gif" width="180"> |
 | **BigFish** | **Chaser** |
 | <img src="./assets/bigfish.gif" width="240"> | <img src="./assets/chaser.gif" width="240"> |
 | **Leaper** | **Heist** |
 | <img src="./assets/leaper.gif" width="240"> | <img src="./assets/heist.gif" width="240"> |
 
+</div>
 
+
+## Methodology
 ### Architecture
+<div align="center">
+  <img src="./assets/framework.png" width="800px" alt="LAOF Framework">
+</div>
+
+\
 LAOF extends the Latent Action Policies (LAPO) paradigm by integrating a **Flow Decoder**. The training pipeline consists of three stages:
 
 1.  **Pre-training (Unsupervised)**:
