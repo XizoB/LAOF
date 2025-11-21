@@ -72,7 +72,7 @@ LAOF extends the Latent Action Policies (LAPO) paradigm by integrating a **Flow 
 ## Installation
 
 ```bash
-git clone [https://github.com/XizoB/LAOF.git](https://github.com/XizoB/LAOF.git)
+git clone https://github.com/XizoB/LAOF.git
 cd LAOF
 conda create -n laof python=3.10
 conda activate laof
