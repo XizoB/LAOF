@@ -30,10 +30,10 @@ We propose **LAOF (Robust Latent Action learning with Optical Flow constraints)*
 
 ### Visualization of Optical Flow
 
-| **Spatial** | **Object-centric** |
+| **Spatial** | **Object** |
 | :---: | :---: |
 | <img src="./assets/spatial.gif" width="140"> | <img src="./assets/object.gif" width="140"> |
-| **Goal-oriented** | **Long-horizon** |
+| **Goal** | **Long** |
 | <img src="./assets/goal.gif" width="140"> | <img src="./assets/long.gif" width="140"> |
 | **BigFish** | **Chaser** |
 | <img src="./assets/bigfish.gif" width="240"> | <img src="./assets/chaser.gif" width="240"> |
